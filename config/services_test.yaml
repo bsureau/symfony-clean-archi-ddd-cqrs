@@ -1,0 +1,6 @@
+# add more service definitions when explicit configuration is needed
+# please note that last definitions always *replace* previous ones
+App\Domain\Repository\TodoRepository:
+  class: App\Infrastructure\Doctrine\Repository\InMemoryTodoRepository
+App\Domain\Repository\TaskRepository:
+  class: App\Infrastructure\Doctrine\Repository\InMemoryTaskRepository

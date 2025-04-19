@@ -8,9 +8,7 @@ doctrine:
 
     profiling_collect_backtrace: '%kernel.debug%'
     use_savepoints: true
-    types:
-      todo_id: App\Infrastructure\Doctrine\Type\TodoIdType
-      task_id: App\Infrastructure\Doctrine\Type\TaskIdType
+
   orm:
     auto_generate_proxy_classes: true
     enable_lazy_ghost_objects: true
@@ -20,19 +18,6 @@ doctrine:
     identity_generation_preferences:
       Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
     auto_mapping: true
-    mappings:
-      App:
-        type: xml
-        dir: '%kernel.project_dir%/src/Infrastructure/Doctrine/Mapping/Entity'
-        prefix: 'App\Domain\Entity'
-        alias: Entity
-        is_bundle: false
-      DomainEvents:
-        type: xml
-        dir: '%kernel.project_dir%/src/Infrastructure/Doctrine/Mapping/Event'
-        prefix: 'App\Domain\Event'
-        alias: Event
-        is_bundle: false
     controller_resolver:
       auto_mapping: false
 

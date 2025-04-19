@@ -23,10 +23,10 @@ services:
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
   App\Domain\Repository\TodoRepository:
-    class: App\Infrastructure\Doctrine\Repository\SqlTodoRepository
+    class: App\Infrastructure\Database\Doctrine\Repository\SqlTodoRepository
 
   App\Domain\Repository\DomainEventRepository:
-    class: App\Infrastructure\Doctrine\Repository\SqlDomainEventRepository
+    class: App\Infrastructure\Database\Doctrine\Repository\SqlDomainEventRepository
 
   App\Application\Command\CreateTodoCommandHandler:
     tags:
@@ -40,5 +40,5 @@ services:
     tags:
       - { name: 'messenger.message_handler' }
 
-  App\Infrastructure\Symfony\Listener\ExceptionListener:
+  App\Infrastructure\Http\Symfony\Listener\ExceptionListener:
     tags: [ kernel.event_listener ]

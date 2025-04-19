@@ -2,32 +2,30 @@
 
 namespace App\Application\Command;
 
-use App\Domain\Entity\Task;
-use App\Domain\Entity\Todo;
 use App\Domain\Exception\TodoNotFoundException;
+use App\Domain\Model\Task;
+use App\Domain\Model\Todo;
 use App\Domain\Repository\DomainEventRepository;
 use App\Domain\Repository\TodoRepository;
 use App\Domain\VO\TaskId;
 use App\Domain\VO\TodoId;
 use Ramsey\Uuid\Uuid;
 
-class AddTaskCommandHandler
+class AddTaskCommandHandler extends CommandHandler
 {
     public function __construct(
-        private readonly TodoRepository        $todoRepository,
-        private readonly DomainEventRepository $domainEventRepository
+        private readonly TodoRepository $todoRepository,
+        DomainEventRepository           $domainEventRepository
     )
     {
+        parent::__construct($domainEventRepository);
     }
 
     public function __invoke(AddTaskCommand $command): void
     {
         $todo = $this->getTodoOrFail($command->todoId);
-
-        $task = $this->createTask($command->name);
-        $todo->addTask($task);
-
-        $this->todoRepository->save($todo);
+        $this->addTask($todo, $command->name);
+        $this->todoRepository->update($todo);
         $this->saveDomainEvents($todo->pullDomainEvents());
     }
 
@@ -40,15 +38,9 @@ class AddTaskCommandHandler
         return $todo;
     }
 
-    private function createTask(string $name): Task
+    public function addTask(Todo $todo, string $name): void
     {
-        return Task::create(TaskId::create(Uuid::uuid4()), $name);
-    }
-
-    private function saveDomainEvents(array $domainEvents): void
-    {
-        foreach ($domainEvents as $domainEvent) {
-            $this->domainEventRepository->save($domainEvent);
-        }
+        $task = Task::create(TaskId::create(Uuid::uuid4()), $name);
+        $todo->addTask($task);
     }
 }

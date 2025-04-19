@@ -8,7 +8,7 @@ abstract class DomainEvent
         private readonly string             $id,
         private readonly string             $type,
         private readonly \DateTimeImmutable $occurredOn,
-        private readonly array              $payload
+        private readonly string             $payload
     )
     {
     }
@@ -28,7 +28,7 @@ abstract class DomainEvent
         return $this->occurredOn;
     }
 
-    public function getPayload(): array
+    public function getPayload(): string
     {
         return $this->payload;
     }

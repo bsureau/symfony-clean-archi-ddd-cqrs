@@ -6,7 +6,7 @@ framework:
       command.bus:
         middleware:
           - doctrine_transaction
-          - App\Infrastructure\Messenger\Middleware\LogMessageMiddleware
+          - App\Infrastructure\Messages\Messenger\Middleware\LogMessageMiddleware
       query.bus:
         middleware:
-          - App\Infrastructure\Messenger\Middleware\LogMessageMiddleware
+          - App\Infrastructure\Messages\Messenger\Middleware\LogMessageMiddleware

@@ -2,33 +2,32 @@
 
 namespace App\Application\Command;
 
-use App\Domain\Entity\Todo;
+use App\Domain\Model\Todo;
 use App\Domain\Repository\DomainEventRepository;
 use App\Domain\Repository\TodoRepository;
 use App\Domain\VO\TodoId;
 use Ramsey\Uuid\Uuid;
 
-readonly class CreateTodoCommandHandler
+class CreateTodoCommandHandler extends CommandHandler
 {
     public function __construct(
-        private TodoRepository        $todoRepository,
-        private DomainEventRepository $domainEventRepository
+        private TodoRepository $todoRepository,
+        DomainEventRepository  $domainEventRepository
     )
     {
+        parent::__construct($domainEventRepository);
     }
 
     public function __invoke(CreateTodoCommand $createTodoCommand): void
     {
-        $todoId = TodoId::create(Uuid::uuid4());
-        $todo = Todo::create($todoId, $createTodoCommand->name);
-        $this->todoRepository->save($todo);
+        $todo = $this->createTodo($createTodoCommand->name);
+        $this->todoRepository->add($todo);
         $this->saveDomainEvents($todo->pullDomainEvents());
     }
 
-    private function saveDomainEvents(array $pullDomainEvents)
+    public function createTodo(string $name): Todo
     {
-        foreach ($pullDomainEvents as $domainEvent) {
-            $this->domainEventRepository->save($domainEvent);
-        }
+        $todoId = TodoId::create(Uuid::uuid4());
+        return Todo::create($todoId, $name);
     }
 }

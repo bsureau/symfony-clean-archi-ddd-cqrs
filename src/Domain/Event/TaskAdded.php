@@ -2,7 +2,7 @@
 
 namespace App\Domain\Event;
 
-use App\Domain\Entity\Task;
+use App\Domain\Model\Task;
 use Ramsey\Uuid\Uuid;
 
 class TaskAdded extends DomainEvent
@@ -13,11 +13,7 @@ class TaskAdded extends DomainEvent
             Uuid::uuid4()->toString(),
             'task_added',
             new \DateTimeImmutable(),
-            [
-                'taskId' => $task->getId(),
-                'name' => $task->getName(),
-                'todoId' => $task->getTodo()->getId(),
-            ]
+            json_encode($task),
         );
     }
 }
